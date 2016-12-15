@@ -17,6 +17,18 @@ app.get('/tempClicker.png', function(request, response){
 	response.sendFile(__dirname + '/tempClicker.png');
 });
 
+app.get('/beerClicker.png', function(request, response){
+	response.sendFile(__dirname + '/beerClicker.png');
+});
+
+app.get('/digital_dot.png', function(request, response){
+	response.sendFile(__dirname + '/digital_dot.png');
+});
+
+app.get('/digital_dot.fnt', function(request, response){
+	response.sendFile(__dirname + '/digital_dot.fnt');
+});
+
 http.listen(8888);
 
 console.log("Listening on localhost:8888");
