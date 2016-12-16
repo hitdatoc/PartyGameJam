@@ -29,6 +29,18 @@ app.get('/digital_dot.fnt', function(request, response){
 	response.sendFile(__dirname + '/digital_dot.fnt');
 });
 
+app.get('/Alien.png', function(request, response){
+	response.sendFile(__dirname + '/Alien.png');
+});
+
+app.get('/PartyHuman.png', function(request, response){
+	response.sendFile(__dirname + '/PartyHuman.png');
+});
+
+app.get('/Floor1.png', function(request, response){
+	response.sendFile(__dirname + '/Floor1.png');
+});
+
 http.listen(8888);
 
 console.log("Listening on localhost:8888");

@@ -14,6 +14,7 @@ var tileDistance = 700;
 
 //Sprites
 var clicker;
+var danceFloor;
 
 //Sprite Groups
 var guestGroup;
@@ -48,7 +49,10 @@ var gameState = {
 
 		//Load Assets
 		game.load.image('tempGuest', 'tempClicker.png');
+		game.load.image('alienGuest', 'Alien.png');
+		game.load.image('girlGuest', 'PartyHuman.png');
 		game.load.image('clicker', 'beerClicker.png');
+		game.load.image('danceFloor', 'Floor1.png');
 	},
 
 	create: function() {
@@ -57,9 +61,9 @@ var gameState = {
 		game.stage.backgroundColor = '#1d1d1d';
 
 		//Initialize
+		this.drawClubFloor();
 		this.clickerInit();
 		this.guestsInit();
-		this.drawClubFloor();
 		this.statisticsInit();
 
 		//Debug Text
@@ -167,7 +171,15 @@ var gameState = {
 	},
 
 	newGuest: function() {
-		var newGuest = guestGroup.create(Math.random() * WINDOW_WIDTH, Math.random() * WINDOW_HEIGHT, 'tempGuest');
+		var randomGuest = Math.floor(Math.random() * (3 - 1 + 1)) + 1;
+		var newGuest;
+		if(randomGuest == 1){
+			newGuest = guestGroup.create(Math.random() * WINDOW_WIDTH, Math.random() * WINDOW_HEIGHT, 'alienGuest');
+		} else {
+			newGuest = guestGroup.create(Math.random() * WINDOW_WIDTH, Math.random() * WINDOW_HEIGHT, 'girlGuest');
+		}
+		newGuest.scale.setTo(0.25,0.25);
+		//var newGuest = guestGroup.create(Math.random() * WINDOW_WIDTH, Math.random() * WINDOW_HEIGHT, 'tempGuest');
 		var max = 3;
 		var min = 0;
 		newGuest.animMovement = Math.floor(Math.random() * (max - min + 1)) + min;
@@ -211,13 +223,16 @@ var gameState = {
 	//------------------------------------------------------------------------------------------------------
 	drawClubFloor: function() {
 		//Basic Tile
-		graphics.beginFill(DARK_PURPLE);
+		/**graphics.beginFill(DARK_PURPLE);
 		graphics.moveTo(WINDOW_WIDTH/2, WINDOW_HEIGHT/2 - tileDistance);
 		graphics.lineTo(WINDOW_WIDTH/2 + tileDistance, WINDOW_HEIGHT/2);
 		graphics.lineTo(WINDOW_WIDTH/2, WINDOW_HEIGHT/2 + tileDistance);
 		graphics.lineTo(WINDOW_WIDTH/2 - tileDistance, WINDOW_HEIGHT/2);
 		graphics.lineTo(WINDOW_WIDTH/2, WINDOW_HEIGHT/2 - tileDistance);
 		graphics.endFill();
+		**/
+		danceFloor = game.add.sprite(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 'danceFloor');
+		danceFloor.anchor.setTo(0.5, 0.5);
 	}
 	//------------------------------------------------------------------------------------------------------
 }
