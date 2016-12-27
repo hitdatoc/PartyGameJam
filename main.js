@@ -9,12 +9,17 @@ var SECOND = 60;
 var MINUTE = 60 * SECOND;
 var HOUR = 60 * MINUTE;
 
+var SLIDE_SPEED = 10;
+
 var game, graphics;
 var tileDistance = 700;
 
 //Sprites
 var clicker;
 var danceFloor;
+var upgradeTab;
+var upgradeBox;
+var upgradeWindow;
 
 //Sprite Groups
 var guestGroup;
@@ -30,6 +35,11 @@ var secondCounter = 0;
 var minuteCounter = 0;
 
 //Statistics UI
+var upgradeWindowOpen = false;
+
+//Upgrades
+var upgradeList = [];
+
 //Generate bitmap fonts using: http://kvazars.com/littera/
 var beerText;
 var moneyText;
@@ -37,6 +47,13 @@ var peopleText;
 
 //Debug Text
 var debugText;
+
+//Default Upgrade
+var defaultUpgrade = { 
+	name: "Default Upgrade",
+	cost: 1 ,
+	viewable: true
+};
 
 //Create GameState
 var gameState = {
@@ -53,6 +70,8 @@ var gameState = {
 		game.load.image('girlGuest', 'PartyHuman.png');
 		game.load.image('clicker', 'beerClicker.png');
 		game.load.image('danceFloor', 'Floor1.png');
+		game.load.image('upgradeWindow', 'tempUpgradeWindow.png')
+		game.load.image('upgradeTab', 'tempUpgradeTab.png');
 	},
 
 	create: function() {
@@ -62,6 +81,7 @@ var gameState = {
 
 		//Initialize
 		this.drawClubFloor();
+		this.upgradeInit();
 		this.clickerInit();
 		this.guestsInit();
 		this.statisticsInit();
@@ -75,6 +95,9 @@ var gameState = {
 		this.minuteCount();
 		this.peopleCount();
 		this.moneyCount();
+
+		//Upgrade Window
+		this.drawUpgradeWindow();
 
 		//Animate Guests
 		this.animGuestDefault();
@@ -109,9 +132,9 @@ var gameState = {
 	//Statistics UI
 	//------------------------------------------------------------------------------------------------------
 	statisticsInit: function() {
-		beerText = game.add.text(WINDOW_WIDTH-200, WINDOW_HEIGHT-300, "Beer: 0", { font: "16px Arial", fill: "#ffffff", align: "center" } );
-		peopleText = game.add.text(WINDOW_WIDTH-200, WINDOW_HEIGHT-320, "Guests: 0", { font: "16px Arial", fill: "#ffffff", align: "center" } );
-		moneyText = game.add.text(WINDOW_WIDTH-200, WINDOW_HEIGHT-340, "Money: 0", { font: "16px Arial", fill: "#ffffff", align: "center" } );		
+		beerText = game.add.text(WINDOW_WIDTH-200, 50, "Beer: 0", { font: "16px Arial", fill: "#ffffff", align: "center" } );
+		peopleText = game.add.text(WINDOW_WIDTH-200, 70, "Guests: 0", { font: "16px Arial", fill: "#ffffff", align: "center" } );
+		moneyText = game.add.text(WINDOW_WIDTH-200, 90, "Money: 0", { font: "16px Arial", fill: "#ffffff", align: "center" } );		
 	},
 	//------------------------------------------------------------------------------------------------------
 
@@ -143,13 +166,13 @@ var gameState = {
 	peopleLoss: function(loss) {
 		people = people - loss;
 		if(people < 0) { people = 0; }
+		if(people > 0) { this.removeGuest(); }
 		peopleText.text = "Guests: " + people;
-		this.removeGuest();
 	},
 
 	moneyCount: function() {
 		secondCounter++;
-		debugText.text = "Timer: " + secondCounter;
+		//debugText.text = "Timer: " + secondCounter;
 
 		if(secondCounter > SECOND){
 			secondCounter = 0;
@@ -233,8 +256,69 @@ var gameState = {
 		**/
 		danceFloor = game.add.sprite(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 'danceFloor');
 		danceFloor.anchor.setTo(0.5, 0.5);
-	}
+	},
 	//------------------------------------------------------------------------------------------------------
+
+	//------------------------------------------------------------------------------------------------------
+	//Upgrade Tab
+	//------------------------------------------------------------------------------------------------------
+	upgradeInit: function() {
+		//Upgrade Window Init
+		upgradeWindow = game.add.sprite(-265,50,'upgradeWindow');
+		upgradeWindow.anchor.setTo(0,0);
+
+		//Upgrade Tab Init
+		upgradeTab = game.add.sprite(0,50,'upgradeTab');
+		upgradeTab.anchor.setTo(0,0);
+		upgradeTab.inputEnabled = true;
+		upgradeTab.events.onInputUp.add(this.upgradeTabUp, this);
+	},
+
+	drawUpgradeWindow: function() {
+		if(upgradeWindowOpen){
+			//Open Upgrade window
+			//Set Tab
+			if(upgradeTab.x < 265){
+				upgradeTab.x = upgradeTab.x + SLIDE_SPEED;
+			}
+
+			//Set Window
+			if(upgradeWindow.x < 0){
+				upgradeWindow.x = upgradeWindow.x + SLIDE_SPEED;
+			}
+		} else {
+			//Close Upgrade Window
+			//Set Tab
+			if(upgradeTab.x > 0){
+				upgradeTab.x = upgradeTab.x - SLIDE_SPEED;
+			}
+
+			//Set Window
+			if(upgradeWindow.x > -265){
+				upgradeWindow.x = upgradeWindow.x - SLIDE_SPEED;
+			}
+		}
+	},
+
+	upgradeTabUp: function() {
+		upgradeWindowOpen = !upgradeWindowOpen;
+		debugText.text = "Upgrade Window Open: " + upgradeWindowOpen;
+	},
+
+	//------------------------------------------------------------------------------------------------------
+	//Upgrade Selections
+	//------------------------------------------------------------------------------------------------------
+	upgradeBoxInit: function() {
+
+	},
+	
+	drawUpgrades: function() {
+
+	},
+
+	drawUpgradeBox: function() {
+
+	}
 }
 
 //Initialize Phaser and Game

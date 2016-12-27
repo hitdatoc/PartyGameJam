@@ -41,6 +41,14 @@ app.get('/Floor1.png', function(request, response){
 	response.sendFile(__dirname + '/Floor1.png');
 });
 
+app.get('/tempUpgradeWindow.png', function(request, response){
+	response.sendFile(__dirname + '/tempUpgradeWindow.png');
+});
+
+app.get('/tempUpgradeTab.png', function(request, response){
+	response.sendFile(__dirname + '/tempUpgradeTab.png');
+});
+
 http.listen(8888);
 
 console.log("Listening on localhost:8888");
